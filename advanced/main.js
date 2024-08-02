@@ -1,6 +1,9 @@
 import './style.css'
 import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
+import { environmentsComponent } from './src/concepts/01-enviroments';
+import { callbackComponent } from './src/concepts/02-callbacks';
+import { promiseComponent } from './src/concepts/03-promises';
 
 document.querySelector('#app').innerHTML = `
   <div>
@@ -15,3 +18,9 @@ document.querySelector('#app').innerHTML = `
     </div>
   </div>
 `;
+
+const element = document.querySelector('.card');
+
+// environmentsComponent(element);
+// callbackComponent(element);
+promiseComponent(element);
