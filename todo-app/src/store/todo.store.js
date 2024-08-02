@@ -42,9 +42,9 @@ const getTodos = (filter = Filters.All) => {
     case Filters.All:
       return [...state.todos];
     case Filters.Completed:
-      return state.filter(todo => todo.done);
+      return state.todos.filter(todo => todo.done);
     case Filters.Pending:
-      return state.filter(todo => !todo.done);
+      return state.todos.filter(todo => !todo.done);
     default:
       throw new Error(`Option ${ filter } is not valid.`);
   }
