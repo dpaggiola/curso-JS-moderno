@@ -1,4 +1,5 @@
-import loadUsersByPage from '../use-cases/load-users-by-page';
+import { User } from '../models/user';
+import {loadUsersByPage} from '../use-cases/load-users-by-page';
 
 
 const state = {
@@ -7,7 +8,11 @@ const state = {
 };
 
 const loadNextPage = async () => {
-  await loadUsersByPage(state.curentPage + 1);
+  const users = await loadUsersByPage(state.curentPage + 1);
+  if (users.length === 0) return;
+
+  state.curentPage += 1;
+  state.users = users;
 };
 
 const loadPreviousPage = async () => {
@@ -28,6 +33,15 @@ export default {
   onUserChanged,
   reloadPage,
 
-  getUser: () => [...state.users],
+  /**
+   * 
+   * @returns {User[]}
+   */
+  getUsers: () => [...state.users],
+
+  /**
+   * 
+   * @returns {Number}
+   */
   getCurrentPage: () => state.curentPage,
 };
