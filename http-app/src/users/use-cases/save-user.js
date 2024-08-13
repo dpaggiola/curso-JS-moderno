@@ -1,46 +1,65 @@
 import { userModelToLocalhost } from "../mappers/user-to-localhost.mapper";
+import { localhostUserToModel } from "../mappers/localhost-user.mapper";
 import { User } from "../models/user";
 
 /**
- * 
+ *
  * @param {Like<User>} userLike
- * @returns {Promise<User>} 
+ * @returns {Promise<User>}
  */
-export const saveUser = async(userLike) => {
-
+export const saveUser = async (userLike) => {
   const user = new User(userLike);
 
   if (!user.firstName || !user.lastName) {
-    throw 'First & last name are required.';
+    throw "First & last name are required.";
   }
 
   const userToSave = userModelToLocalhosthost(user);
+  let userUpdated;
 
   if (user.id) {
-    throw 'No implementada la actualización';
-    return;
+    updateUser = await updateUser(userToSave);
+  } else {
+    userUpdated = await createUser(userToSave);
   }
 
-  const updatedUser = await createUser(userToSave);
-  return updatedUser;
-
+  return localhostUserToModel(userUpdated);
 };
 
 /**
  * @param {Like<User>} user
  * @returns {Promise<User>}
  */
-const createUser = async(user) => {
+const createUser = async (user) => {
   const url = `${import.meta.env.VITE_API_URL}/users`;
   const res = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(user),
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
   const newUser = await res.json();
 
   return newUser;
-}
+};
+
+/**
+ * @param {Like<User>} user
+ * @returns {Promise<User>}
+ */
+const updateUser = async (user) => {
+  const url = `${import.meta.env.VITE_API_URL}/users/${user.id}`;
+  const res = await fetch(url, {
+    method: "PATCH",
+    body: JSON.stringify(user),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const updatedUser = await res.json();
+
+  return updatedUser;
+};
